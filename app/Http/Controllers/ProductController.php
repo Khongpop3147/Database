@@ -8,7 +8,11 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::withAvg('reviews', 'rating')->latest()->paginate(12);
+        $products = Product::with(['images', 'category'])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
+            ->latest()
+            ->paginate(12);
         return view('products.index', compact('products'));
     }
 

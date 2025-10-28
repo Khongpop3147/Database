@@ -8,7 +8,10 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $latest = Product::latest()->take(6)->get();
-        return view('home', compact('latest'));
+        $latest = Product::with(['images', 'category'])->latest()->take(6)->get();
+        $featured = Product::with(['images', 'category'])->inRandomOrder()->take(4)->get();
+        $categories = \App\Models\Category::all();
+        
+        return view('home', compact('latest', 'featured', 'categories'));
     }
 }
