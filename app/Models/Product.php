@@ -61,6 +61,14 @@ class Product extends Model
     }
 
     /**
+     * ความสัมพันธ์: สินค้าหนึ่งอยู่ในรายการโปรดของหลายคน
+     */
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    /**
      * คำนวณค่าเฉลี่ยเรตติ้ง (ถ้ามีรีวิว)
      */
     public function avgRating()

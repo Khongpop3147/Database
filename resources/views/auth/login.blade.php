@@ -1,47 +1,84 @@
 <x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <div class="min-h-screen flex flex-col items-center justify-center bg-gray-900 py-12 px-6 relative">
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        {{-- Page Title on Left --}}
+        <div class="absolute top-8 left-8 text-white font-semibold text-2xl lg:text-3xl select-none">
+            Log-in Page
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+        {{-- Card --}}
+        <div class="w-full max-w-md bg-white border border-gray-200 rounded-2xl shadow-lg p-8">
+            {{-- LOGO --}}
+            <div class="mb-6 text-center">
+                <div class="text-3xl font-black text-gray-800">
+                    LOGO
+                </div>
+            </div>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+            {{-- Session flash --}}
+            <x-auth-session-status class="mb-4" :status="session('status')" />
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                @csrf
+
+                {{-- Email --}}
+                <div>
+                    <label for="email" class="sr-only">Email</label>
+                    <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value="{{ old('email') }}"
+                        required
+                        autofocus
+                        autocomplete="username"
+                        placeholder="Email"
+                        class="w-full h-12 rounded-lg bg-gray-300 border-0 px-4 text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-blue-400 focus:outline-none transition"
+                    />
+                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                </div>
+
+                {{-- Password --}}
+                <div>
+                    <label for="password" class="sr-only">Password</label>
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        required
+                        autocomplete="current-password"
+                        placeholder="Password"
+                        class="w-full h-12 rounded-lg bg-gray-300 border-0 px-4 text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-blue-400 focus:outline-none transition"
+                    />
+                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                </div>
+
+                {{-- Buttons --}}
+                <div class="flex items-center justify-center gap-3 pt-2">
+                    <button
+                        type="submit"
+                        class="inline-flex justify-center rounded-full px-8 py-2.5 text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 transition font-semibold"
+                    >
+                        LOGIN
+                    </button>
+
+                    <a
+                        href="{{ route('register') }}"
+                        class="inline-flex justify-center rounded-full px-6 py-2.5 text-white bg-blue-500 hover:bg-blue-600 active:bg-blue-700 shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 transition font-semibold"
+                    >
+                        Register
+                    </a>
+                </div>
+
+                {{-- Remember + Forgot (optional, below buttons) --}}
+                @if (Route::has('password.request'))
+                    <div class="text-center text-sm pt-2">
+                        <a href="{{ route('password.request') }}" class="text-blue-600 hover:underline">
+                            Forgot password?
+                        </a>
+                    </div>
+                @endif
+            </form>
         </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
+    </div>
 </x-guest-layout>

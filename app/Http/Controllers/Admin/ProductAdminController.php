@@ -29,9 +29,26 @@ class ProductAdminController extends Controller
             'stock'       => ['required','integer','min:0'],
             'category_id' => ['nullable','exists:categories,id'],
             'description' => ['nullable','string'],
+            'images.*'    => ['nullable','image','max:10240'], // 10MB max per image
         ]);
-        $product = Product::create($data);
-        return redirect()->route('admin.products.edit', $product)->with('success','Product created');
+        
+        $product = Product::create([
+            'name'        => $data['name'],
+            'price'       => $data['price'],
+            'stock'       => $data['stock'],
+            'category_id' => $data['category_id'] ?? null,
+            'description' => $data['description'] ?? null,
+        ]);
+
+        // Handle multiple image uploads
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('products', 'public');
+                $product->images()->create(['path' => $path]);
+            }
+        }
+
+        return redirect()->route('admin.products.index')->with('success','Product created successfully');
     }
 
     public function edit(Product $product)

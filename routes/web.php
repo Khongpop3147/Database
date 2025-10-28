@@ -7,7 +7,9 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Admin\ProductAdminController;
+use App\Http\Controllers\Admin\BannerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile/avatar', [ProfileController::class, 'uploadAvatar'])->name('profile.avatar');
 
     // ตะกร้า
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -53,6 +56,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])
         ->whereNumber('product')
         ->name('reviews.store');
+    
+    // Wishlist
+    Route::post('/wishlist/toggle/{product}', [WishlistController::class, 'toggle'])
+        ->whereNumber('product')
+        ->name('wishlist.toggle');
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 });
 
 // กลุ่มแอดมิน (เฉพาะผู้มีสิทธิ์)
@@ -62,6 +71,8 @@ Route::middleware(['auth', 'can:admin'])
     ->group(function () {
         Route::get('/', fn () => redirect()->route('admin.products.index'))->name('home');
         Route::resource('products', ProductAdminController::class)->except(['show']);
+        Route::resource('banners', BannerController::class)->except(['show', 'edit', 'update']);
+        Route::post('banners/{banner}/toggle', [BannerController::class, 'toggleActive'])->name('banners.toggle');
     });
 
 require __DIR__ . '/auth.php';
