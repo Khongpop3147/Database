@@ -39,8 +39,11 @@
                         </x-nav-link>
 
                         @can('admin')
-                            <x-nav-link :href="route('admin.products.index')" :active="request()->is('admin*')">
-                                {{ __('Admin') }}
+                            <x-nav-link :href="route('admin.products.index')" :active="request()->is('admin/products*')">
+                                {{ __('Products') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.banners.index')" :active="request()->is('admin/banners*')">
+                                {{ __('Banners') }}
                             </x-nav-link>
                         @endcan
                     @endauth
@@ -127,8 +130,11 @@
                 </x-responsive-nav-link>
 
                 @can('admin')
-                    <x-responsive-nav-link :href="route('admin.products.index')" :active="request()->is('admin*')">
-                        {{ __('Admin') }}
+                    <x-responsive-nav-link :href="route('admin.products.index')" :active="request()->is('admin/products*')">
+                        {{ __('Products') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.banners.index')" :active="request()->is('admin/banners*')">
+                        {{ __('Banners') }}
                     </x-responsive-nav-link>
                 @endcan
             @endauth
